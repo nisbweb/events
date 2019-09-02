@@ -62,7 +62,7 @@ def update_event(event_dict):
 def add_reg(reg_info):
     reg_id = uuid.uuid4().hex
     reg_info["id"] = reg_id
-    reg_id["status"] = "registered"
+    reg_info["status"] = "registered"
     db.regs.insert_one(reg_info)
     return reg_id
 
