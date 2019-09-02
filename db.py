@@ -30,7 +30,9 @@ def get_events():
     return events
 
 def get_event(id):
-    return db.events.find_one({"id":id})
+    event = db.events.find_one({"id":id})
+    event.pop("_id")
+    return event
 
 def add_event(event_dict):
     e_id = uuid.uuid4().hex
@@ -68,7 +70,9 @@ def delete_reg(reg_id):
     db.regs.delete_one({"id":reg_id})
 
 def get_reg(reg_id):
-    return db.regs.find_one({"id":reg_id})
+    reg = db.regs.find_one({"id":reg_id})
+    reg.pop("_id")
+    return reg
 
 
 # update reg functions
