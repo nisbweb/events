@@ -14,7 +14,7 @@ def index():
 def events_controller():
     return jsonify(get_events())
 
-@app.route("/event", methods=["GET"])
+@app.route("/event", methods=["GET","PUT","POST","DELETE"])
 def event_controller():
     if request.method=="GET":
         events = get_event(request.args.get("event_id"))
@@ -46,7 +46,7 @@ def regs_controller():
         return jsonify(regs)
 
 
-@app.route("/reg", methods=["GET","PUT","POST","DELETE"])
+@app.route("/reg", methods=["GET","POST","DELETE"])
 def reg_controller():
     if request.method=="GET":
         reg = get_reg(request.args.get("reg_id"))
