@@ -29,8 +29,8 @@ def event_controller():
         return jsonify({"status":"ok"})
 
     elif request.method=="POST":
-        add_event(request.get_json())
-        return jsonify({"status":"ok"})
+        id = add_event(request.get_json())
+        return jsonify({"status":"ok","event_id":id})
 
 
 @app.route("/regs")
@@ -46,7 +46,7 @@ def regs_controller():
         return jsonify(regs)
 
 
-@app.route("/reg", methods=["GET","POST","DELETE"])
+@app.route("/reg", methods=["GET","POST", "PUT" ,"DELETE"])
 def reg_controller():
     if request.method=="GET":
         reg = get_reg(request.args.get("reg_id"))
@@ -59,6 +59,10 @@ def reg_controller():
     elif request.method=="POST":
         add_reg(request.get_json())
         return jsonify({"status":"ok"})
+
+    elif request.method=="PUT":
+        # mark attended/paid
+        pass
 
 
 if __name__ == '__main__':
