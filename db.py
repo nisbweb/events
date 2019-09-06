@@ -44,6 +44,7 @@ def delete_event(id):
     db.events.delete_one({"id":id})
 
 def update_event(event_dict):
+    id = event_dict["id"]
     db.events.find_one_and_replace({"id":id},event_dict)
 
 
