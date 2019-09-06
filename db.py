@@ -72,23 +72,31 @@ def delete_reg(reg_id):
 
 def get_reg(reg_id):
     reg = db.regs.find_one({"id":reg_id})
-    reg.pop("_id")
-    return reg
+    if reg:
+        reg.pop("_id")
+        return reg
+    else:
+        return None
 
 
 # update reg functions
 # status = paid
 def mark_paid(reg_id):
     reg = get_reg(reg_id)
-    reg["status"] = "paid"
-    db.regs.find_one_and_replace({"id":reg_id},reg)
+    if reg:
+        reg["status"] = "paid"
+        return db.regs.find_one_and_replace({"id":reg_id},reg)
+    else:
+        return None
 
 # status = attended
 def mark_attended(reg_id):
     reg = get_reg(reg_id)
-    reg["status"] = "attended"
-    db.regs.find_one_and_replace({"id":reg_id},reg)
-
+    if reg:
+        reg["status"] = "attended"
+        return db.regs.find_one_and_replace({"id":reg_id},reg)
+    else:
+        return None
 
 
 

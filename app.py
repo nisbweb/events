@@ -54,7 +54,10 @@ def regs_controller():
 def reg_controller():
     if request.method=="GET":
         reg = get_reg(request.args.get("reg_id"))
-        return jsonify(reg)
+        if reg:
+            return jsonify(reg)
+        else:
+            return jsonify({}),204 #no content
 
     elif request.method=="DELETE":
         delete_reg(request.args.get("reg_id"))
