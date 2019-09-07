@@ -170,7 +170,7 @@ def get_notice(id):
 def add_notice(notice_dict):
     n_id = uuid.uuid4().hex
     notice_dict["id"] = n_id
-    reg_info["timestamp"] = datetime.datetime.today()
+    notice_dict["timestamp"] = datetime.datetime.today()
     db.notices.insert_one(notice_dict)
     return n_id
 
