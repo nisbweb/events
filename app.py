@@ -15,15 +15,11 @@ def index():
     })
 
 
-# Purpose - get multiple events
-# IN: none
-# OUT: list of events
 @app.route("/events")
 def events_controller():
     if "after" in request.args:
         events = get_events(after=request.args.get("after"))
         return jsonify(events)
-    
     return jsonify(get_events())
 
 
@@ -44,8 +40,6 @@ def event_controller():
     elif request.method == "POST":
         id = add_event(request.get_json())
         return jsonify({"status": "ok", "event_id": id})
-
-
 
 
 @app.route("/regs")
@@ -94,7 +88,6 @@ def reg_controller():
                     "status": "error",
                     "error": "reg update operation failed"
                     })
-
 
 
 @app.route("/notices")

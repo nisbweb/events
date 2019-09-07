@@ -32,7 +32,14 @@ db = client.main
 
 def get_events(after=None):
     events = []
-    for e in db.events.find():
+    query = {}
+    if after:
+        after_time = datetime.strptime(
+            after, '%d/%m/%y %H:%M:%S')
+        query["timestamp"] = {
+            "$gte": after_time
+        }
+    for e in db.events.find(query):
         e.pop("_id")
         events.append(e)
     return events
@@ -154,8 +161,15 @@ def get_regs(event_id, status="any"):
 
 
 def get_notices(after=None):
+    query = {}
     notices = []
-    for e in db.notices.find():
+    if after:
+        after_time = datetime.strptime(
+            after, '%d/%m/%y %H:%M:%S')
+        query["timestamp"] = {
+            "$gte": after_time
+        }
+    for e in db.notices.find(query):
         e.pop("_id")
         notices.append(e)
     return notices
