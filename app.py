@@ -11,68 +11,88 @@ CORS(app)
 @app.route('/')
 def index():
     return jsonify({
-        "status":"ok"
+        "status": "ok"
     })
 
+
+# Purpose - get multiple events
+# IN: none
+# OUT: list of events
 @app.route("/events")
 def events_controller():
+    if "after" in request.args:
+        events = get_events(after=request.args.get("after"))
+        return jsonify(events)
+    
     return jsonify(get_events())
 
-@app.route("/event", methods=["GET","PUT","POST","DELETE"])
+
+@app.route("/event", methods=["GET", "PUT", "POST", "DELETE"])
 def event_controller():
-    if request.method=="GET":
+    if request.method == "GET":
         events = get_event(request.args.get("event_id"))
         return jsonify(events)
 
-    elif request.method=="DELETE":
+    elif request.method == "DELETE":
         delete_event(request.args.get("event_id"))
-        return jsonify({"status":"ok"})
+        return jsonify({"status": "ok"})
 
-    elif request.method=="PUT":
+    elif request.method == "PUT":
         update_event(request.get_json())
-        return jsonify({"status":"ok"})
+        return jsonify({"status": "ok"})
 
-    elif request.method=="POST":
+    elif request.method == "POST":
         id = add_event(request.get_json())
-        return jsonify({"status":"ok","event_id":id})
+        return jsonify({"status": "ok", "event_id": id})
 
 
 @app.route("/regs")
 def regs_controller():
     if "email" in request.args:
-        return jsonify({"status":"error","error":"method not implemented yet."})
+        return jsonify({
+            "status": "error", 
+            "error": "method not implemented yet."
+            })
 
     elif "event_id" in request.args:
         if "status" in request.args:
-            regs = get_regs(request.args.get("event_id"),request.args.get("status"))
+            regs = get_regs(request.args.get("event_id"),
+                            request.args.get("status"))
         else:
             regs = get_regs(request.args.get("event_id"))
         return jsonify(regs)
 
 
-@app.route("/reg", methods=["GET","POST", "PUT" ,"DELETE"])
+@app.route("/reg", methods=["GET", "POST", "PUT", "DELETE"])
 def reg_controller():
-    if request.method=="GET":
+    if request.method == "GET":
         reg = get_reg(request.args.get("reg_id"))
         if reg:
             return jsonify(reg)
         else:
-            return jsonify({}),204 #no content
+            return jsonify({}), 204  # no content
 
-    elif request.method=="DELETE":
+    elif request.method == "DELETE":
         delete_reg(request.args.get("reg_id"))
-        return jsonify({"status":"ok"})
+        return jsonify({"status": "ok"})
 
-    elif request.method=="POST":
+    elif request.method == "POST":
         add_reg(request.get_json())
-        return jsonify({"status":"ok"})
+        return jsonify({"status": "ok"})
 
-    elif request.method=="PUT":
-        # mark attended/paid
-        pass
+    elif request.method == "PUT":
+        response_obj = request.get_json()
+        if "status" in response_obj:  # registered, paid, attended
+            reg_id = request.args.get("reg_id")
+            o = update_reg_status(reg_id, response_obj["status"])
+            if o:
+                return jsonify(o)
+            else:
+                return jsonify({
+                    "status": "error",
+                    "error": "reg update operation failed"
+                    })
 
 
 if __name__ == '__main__':
-    # session["login"] = False
-
     app.run(host='0.0.0.0', debug=True)
