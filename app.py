@@ -46,6 +46,8 @@ def event_controller():
         return jsonify({"status": "ok", "event_id": id})
 
 
+
+
 @app.route("/regs")
 def regs_controller():
     if "email" in request.args:
@@ -92,6 +94,34 @@ def reg_controller():
                     "status": "error",
                     "error": "reg update operation failed"
                     })
+
+
+
+@app.route("/notices")
+def notices_controller():
+    if "after" in request.args:
+        notices = get_notices(after=request.args.get("after"))
+        return jsonify(notices)
+    return jsonify(get_notices())
+
+
+@app.route("/notice", methods=["GET", "PUT", "POST", "DELETE"])
+def notice_controller():
+    if request.method == "GET":
+        notice = get_notice(request.args.get("notice_id"))
+        return jsonify(notice)
+
+    elif request.method == "DELETE":
+        delete_notice(request.args.get("notice_id"))
+        return jsonify({"status": "ok"})
+
+    elif request.method == "PUT":
+        update_notice(request.get_json())
+        return jsonify({"status": "ok"})
+
+    elif request.method == "POST":
+        id = add_notice(request.get_json())
+        return jsonify({"status": "ok", "notice_id": id})
 
 
 if __name__ == '__main__':

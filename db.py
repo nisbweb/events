@@ -1,6 +1,7 @@
 import pymongo
 import os
 import uuid
+import datetime
 
 client = pymongo.MongoClient(os.environ["MONGO"])
 db = client.main
@@ -22,6 +23,13 @@ db = client.main
 # }
 
 
+#                                m
+#   mmm   m   m   mmm   m mm   mm#mm   mmm
+#  #"  #  "m m"  #"  #  #"  #    #    #   "
+#  #""""   #m#   #""""  #   #    #     """m
+#  "#mm"    #    "#mm"  #   #    "mm  "mmm"
+
+
 def get_events(after=None):
     events = []
     for e in db.events.find():
@@ -39,6 +47,8 @@ def get_event(id):
 def add_event(event_dict):
     e_id = uuid.uuid4().hex
     event_dict["id"] = e_id
+    event_dict["timestamp"] = datetime.strptime(
+        event_dict["timestamp"], '%d/%m/%y %H:%M:%S')
     db.events.insert_one(event_dict)
     return e_id
 
@@ -68,6 +78,7 @@ def add_reg(reg_info):
     reg_id = uuid.uuid4().hex
     reg_info["id"] = reg_id
     reg_info["status"] = "registered"
+    reg_info["timestamp"] = datetime.datetime.today()
     if db.regs.insert_one(reg_info):
         return reg_id
     else:
@@ -123,3 +134,51 @@ def get_regs(event_id, status="any"):
 #         regs_list.append(r)
 
 #     return regs_list
+
+
+#                  m      "
+#  m mm    mmm   mm#mm  mmm     mmm    mmm    mmm
+#  #"  #  #" "#    #      #    #"  "  #"  #  #   "
+#  #   #  #   #    #      #    #      #""""   """m
+#  #   #  "#m#"    "mm  mm#mm  "#mm"  "#mm"  "mmm"
+
+
+# sample notice
+# {
+#     "id":"",
+#     "topic":"general",
+#     "message":"some message",
+#     "data":{},
+#     "timestamp":""
+# }
+
+
+def get_notices(after=None):
+    notices = []
+    for e in db.notices.find():
+        e.pop("_id")
+        notices.append(e)
+    return notices
+
+
+def get_notice(id):
+    notice = db.notices.find_one({"id": id})
+    notice.pop("_id")
+    return notice
+
+
+def add_notice(notice_dict):
+    n_id = uuid.uuid4().hex
+    notice_dict["id"] = n_id
+    reg_info["timestamp"] = datetime.datetime.today()
+    db.notices.insert_one(notice_dict)
+    return n_id
+
+
+def delete_notice(id):
+    db.notices.delete_one({"id": id})
+
+
+def update_notice(notice_dict):
+    id = notice_dict["id"]
+    db.notices.find_one_and_replace({"id": id}, notice_dict)
