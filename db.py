@@ -34,7 +34,7 @@ def get_events(after=None):
     events = []
     query = {}
     if after:
-        after_time = datetime.strptime(
+        after_time = datetime.datetime.strptime(
             after, '%d/%m/%y %H:%M:%S')
         query["timestamp"] = {
             "$gte": after_time
@@ -54,7 +54,7 @@ def get_event(id):
 def add_event(event_dict):
     e_id = uuid.uuid4().hex
     event_dict["id"] = e_id
-    event_dict["timestamp"] = datetime.strptime(
+    event_dict["timestamp"] = datetime.datetime.strptime(
         event_dict["timestamp"], '%d/%m/%y %H:%M:%S')
     db.events.insert_one(event_dict)
     return e_id
@@ -164,7 +164,7 @@ def get_notices(after=None):
     query = {}
     notices = []
     if after:
-        after_time = datetime.strptime(
+        after_time = datetime.datetime.strptime(
             after, '%d/%m/%y %H:%M:%S')
         query["timestamp"] = {
             "$gte": after_time
