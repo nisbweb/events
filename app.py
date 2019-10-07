@@ -73,8 +73,8 @@ def reg_controller():
         return jsonify({"status": "ok"})
 
     elif request.method == "POST":
-        add_reg(request.get_json())
-        return jsonify({"status": "ok"})
+        reg_id = add_reg(request.get_json())
+        return jsonify({"status": "ok", "reg_id": reg_id})
 
     elif request.method == "PUT":
         response_obj = request.get_json()
