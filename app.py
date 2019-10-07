@@ -80,9 +80,8 @@ def reg_controller():
         response_obj = request.get_json()
         if "status" in response_obj:  # registered, paid, attended
             reg_id = request.args.get("reg_id")
-            o = update_reg_status(reg_id, response_obj["status"])
-            if o:
-                return jsonify(o)
+            if update_reg_status(reg_id, response_obj["status"]):
+                return jsonify({"status":"ok"})
             else:
                 return jsonify({
                     "status": "error",

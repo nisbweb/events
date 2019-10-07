@@ -111,9 +111,10 @@ def update_reg_status(reg_id, status="registered"):
     reg = get_reg(reg_id)
     if reg:
         reg["status"] = status
-        return db.regs.find_one_and_replace({"id": reg_id}, reg)
-    else:
-        return None
+        if db.regs.find_one_and_replace({"id": reg_id}, reg):
+            return True
+    
+    return False
 
 
 # status = registered, paid, attended
