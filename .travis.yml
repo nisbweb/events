@@ -36,8 +36,8 @@ jobs:
         api_key: 
           master: $HEROKU
         app: 
-          master: nisb-auth
-
+          master: nisb-events
+          
     - stage: notify
       notifications:
         email: mridul.kepler@gmail.com
