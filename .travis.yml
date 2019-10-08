@@ -1,43 +1,34 @@
-sudo: false  # http://docs.travis-ci.com/user/migrating-from-legacy/
-
+sudo: false
 language: python
-
 cache: pip
-
 python:
-  - 3.6
-
+- 3.6
 install: make requirements
 script: echo "Running tests ..."
-
 stages:
-  - lint
-  - test
-  - name: deploy
-    if: branch = master
-  - notify
-
+- lint
+- test
+- name: deploy
+  if: branch = master
+- notify
 jobs:
-  include:      
-    - stage: lint
-      script: make lint
-
-    - stage: test
-      script: make test
-      env:
-        - export MONGO="mongokey"
-        - export EMAIL_USERNAME="u"
-        - export EMAIL_PASSWORD="p"
-
-    - stage: deploy
-      script: skip
-      deploy:
-        provider: heroku
-        api_key: 
-          master: $HEROKU
-        app: 
-          master: nisb-events
-          
-    - stage: notify
-      notifications:
-        email: mridul.kepler@gmail.com
+  include:
+  - stage: lint
+    script: make lint
+  - stage: test
+    script: make test
+    env:
+    - export MONGO="mongokey"
+    - export EMAIL_USERNAME="u"
+    - export EMAIL_PASSWORD="p"
+  - stage: deploy
+    script: skip
+    deploy:
+      provider: heroku
+      api_key:
+        secure: mH7e11xNsTJvUp3d82SAk4DObAJ9XIFZpfL9PzCmslxswCRbDosjn77RLQs9RzC3J+SGODPIee2HFczIIEzyR8KDZTVXWz9yPQot5KYUePP+S0rKGEyj2N9/yuR3uzvkZ25JTbT2FlsDSCGVO7tqQe1cM9icuLgIZZBZszzrnAbE0EVgHrSj3QPtK3rB8S/fHLek74lq6rihaLHnBTKEboTQOSIsYA7qXF5v6jSh821VisrtImNNa0HoS99RJ75DzkV8KefLm4zlIdTQrcNA61svdU5Cna0kJ6XY5qRU04pZGhPPWdt5UMae5ADI4LONFqV2Ka9RbKdWe1E/fcV575jQwrjEM9vEHAFTGbW3HCYn+3JilNwauifeCZBzL5OyZaCpD6QFU8HktKBuqp+3eVx+jF+uH0I5uJGxKA3J/S6BIL1cOg2YLC7PDSj/mh0cIEF8lBV77/1ymWVrCmDG6306uemRUHe5ERu+GTGsrdz77ZRYC3pWpBzyM2nmhpwOU35KrS0Dsy+JqZitivfPQqkhVuLcDGaEfNOhggP21zKS9VarzhVDAzQaCLhWCo/qXBm6svQo2l2eud0Sa7T1SY3ZPabveKD4fDT6ZyHg6bicAznTaAPN/zUaU28UyQTA403iNoq5E/N/pWl7EAdn7DhU6TsVohrODn5PPs8q7kc=
+      app: nisb-events
+  - stage: notify
+    notifications:
+      email: mridul.kepler@gmail.com
+  
