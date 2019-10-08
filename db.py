@@ -113,7 +113,7 @@ def update_reg_status(reg_id, status="registered"):
         reg["status"] = status
         if db.regs.find_one_and_replace({"id": reg_id}, reg):
             return True
-    
+
     return False
 
 

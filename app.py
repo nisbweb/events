@@ -46,9 +46,9 @@ def event_controller():
 def regs_controller():
     if "email" in request.args:
         return jsonify({
-            "status": "error", 
+            "status": "error",
             "error": "method not implemented yet."
-            })
+        })
 
     elif "event_id" in request.args:
         if "status" in request.args:
@@ -81,12 +81,12 @@ def reg_controller():
         if "status" in response_obj:  # registered, paid, attended
             reg_id = request.args.get("reg_id")
             if update_reg_status(reg_id, response_obj["status"]):
-                return jsonify({"status":"ok"})
+                return jsonify({"status": "ok"})
             else:
                 return jsonify({
                     "status": "error",
                     "error": "reg update operation failed"
-                    })
+                })
 
 
 @app.route("/notices")

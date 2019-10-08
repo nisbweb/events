@@ -1,0 +1,43 @@
+sudo: false  # http://docs.travis-ci.com/user/migrating-from-legacy/
+
+language: python
+
+cache: pip
+
+python:
+  - 3.6
+
+install: make requirements
+script: echo "Running tests ..."
+
+stages:
+  - lint
+  - test
+  - name: deploy
+    if: branch = master
+  - notify
+
+jobs:
+  include:      
+    - stage: lint
+      script: make lint
+
+    - stage: test
+      script: make test
+      env:
+        - export MONGO="mongokey"
+        - export EMAIL_USERNAME="u"
+        - export EMAIL_PASSWORD="p"
+
+    - stage: deploy
+      script: skip
+      deploy:
+        provider: heroku
+        api_key: 
+          master: $HEROKU
+        app: 
+          master: nisb-auth
+
+    - stage: notify
+      notifications:
+        email: mridul.kepler@gmail.com
