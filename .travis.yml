@@ -3,31 +3,28 @@ language: python
 cache: pip
 python:
 - 3.6
-install: make requirements
+install: skip
 script: echo "Running tests ..."
 stages:
-- lint
-- test
+- basic
 - name: deploy
   if: branch = master
 - notify
 jobs:
   include:
-  - stage: lint
+  - stage: basic
     script: make lint
-  - stage: test
-    script: make test
-    env:
-    - export MONGO="mongokey"
-    - export EMAIL_USERNAME="u"
-    - export EMAIL_PASSWORD="p"
+    name: Linting
+  - script: make test
+    name: Unit Tests
   - stage: deploy
     script: skip
     deploy:
       provider: heroku
       api_key:
-        secure: HB9c7eLOwZlxO6Dc+v5GmB/9oRm9d3fGvsVFqDobnd917mGDNVH8aqevBAeUVU6Eqmrp5Vpr1wLa1+wSTBNdk7bnjAIzNI2feg6AtL6HbhCNlwbDH2dLzh+sgCJ519/tdTieIT2TTScrtUoaggdJJ0oS0qRzemO76NI7nlWyctN0Z+Q12h1HE/gTTue9iD6/Dzag9gO5oFNoUIGDSxsGiyJhjhjrVWE/4ZX37hK4Mn8AQ/Tt75HW5D1SpNkFEp8ioMnfwth8Idv5T71YR1uiCBJQ5Hd01jhFtc7L1cCUBnjFSviCuGO50U2tnw6s6vD5OHvaKYZQ4wdHaST0hCVH9PNEMRKsaQK4UBBB2NZMLPE7+U3PaW4OPAlA7kol62a9eBBfXLuKUQ4VOpv3Mrf5qvQaIVzXSqGjE/0QRH7gJ1yzovAMaGP9mnjOM6mrgCA0hajB680bSoxCjaebAkQAzun2d6/m3jLF+q6l6TpasjMuf+UJvbriPZ5mdsvcMMe9f48/xaPMP6vFJ2OHJHidski/bgYuUc2/W04mN5gi7Nsyuy6GXzNnHb+mzOa1LXpfYof09kG4x0CwnNjXbaQUeMXtLwcK0zrcH0he5jNipX/9L2HnczyWtM9lxxR4K7i7HTrJK26ULlBuq4IR/gNUl/MOAA8hk0hOEGr4nN3yxek=
+        secure: Nau4ZHJN5gy6RT5YeYY+p+Y53bOASr9nzODCCC7muvw4DCCyAyc6xYy9hBrKav90cCXBHkjPDVtYY25y8okIcF5qjF4eUKv1o8S4lnSgDh7SRTIj5C1QR+0zCArWCNS4oQoCCVV20ene5xFMEr4vyY4K5H+HlgzOUGxdD57htjRD8nyzHZvv6+WZlACBtiK1TZQpVj+qfvFS5OCpCxz8pWEIfqvt7/vbySAC9e4XhyvOtltfoFK19zQpZIwnXd4E4Z48mZIdSC2c/uNxugPKb5lvpfss/H3BARQCF/nJgtE2nAY59GW2R9LA7AAMJNf6tZNNBQQ+nest6S7hMInsoU+xrL7gixtoqeAy4Ojcw2Wyn2ohRj3hjZS9V0LE7Vb+M1CFARaSekwqD2kTWr46G4mMfzhmTM6pH5SPd2CMmzGeqkbsdCDednOds9K9qdyP98W20UPIrcvx8IEJZFk0GJJoAuVS+iSznVLMqIOmX8zyUwIe8QMMj6Kn9uG4yaM/U9rdGf4dL3hAoffbSNToDxfiIIj2aR0nd40P6AmDFJFG4sV7HY+aaVh1eRQkfgzFAGilabqZlTiBswyAx4+G2rAA7vZgMEGjbMlZ+BfBw9gs2jERlSCTCi5wwdU95swkTPUp9vnyiePRr4Q2sCT0efr/gehNSADUbmoK1JooWeM=
       app: nisb-events
   - stage: notify
     notifications:
       email: mridul.kepler@gmail.com
+
