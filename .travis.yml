@@ -28,3 +28,6 @@ jobs:
     notifications:
       email: mridul.kepler@gmail.com
 
+branches:
+  only: 
+    - master

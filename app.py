@@ -1,3 +1,4 @@
+import sentry
 from flask import Flask, request, jsonify
 from db import *
 from flask_cors import CORS
@@ -117,4 +118,5 @@ def notice_controller():
 
 
 if __name__ == '__main__':
+    a = 1/0
     app.run(host='0.0.0.0', debug=True)
